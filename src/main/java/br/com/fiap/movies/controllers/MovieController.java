@@ -4,6 +4,7 @@ import br.com.fiap.movies.models.Movie;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 public class MovieController {
@@ -18,14 +19,20 @@ public class MovieController {
     }
 
     @GetMapping("/movies")
-    public Movie listAll(){
-        return new Movie(
+    public List<Movie> listAll(){
+        return List.of( new Movie (
                 "Titanic",
                 5,
                 "Todo mundo morreu, acabou :D",
                 LocalDate.of(1997,12,1),
                 "2h30",
                 "Romance"
+        )
         );
+    }
+
+    @PostMapping("/movies")
+    public void createMovie() {
+        System.out.println("Cadastrando filme");
     }
 }
