@@ -38,6 +38,7 @@ public class MovieController {
     @PostMapping("/movies")
     @ResponseStatus(code = HttpStatus.CREATED)
     public Movie createMovie(@RequestBody Movie movie) {
+        // binding = converter JSON para objeto.
         // log.info = sout, porém com mais informações.
         log.info("Cadastrando filme: " + movie);
         return movie;
