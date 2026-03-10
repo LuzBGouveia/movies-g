@@ -1,7 +1,9 @@
 package br.com.fiap.movies.services;
 
 import br.com.fiap.movies.models.Movie;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,4 +31,29 @@ public class MovieService {
                 .findFirst();
     }
 
+    public void deleteMovie(Long id) {
+        if (findMovieById(id).isEmpty()) { //fail fast
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Filme com id " + id + " não encontrado.");
+        }
+        repository.remove(findMovieById(id).get());
+    }
+
+    public Movie updateMovie(Long id, Movie movie) {
+        repository.remove(findMovieById(id).get());
+        movie.setId(id);
+        repository.add(movie);
+
+        return movie;
+    }
+
+    private Optional<Movie> findMovieById(Long id) {
+        // busca o filme
+        var optionalMovie = repository.stream().filter(m -> m.getId().equals(id)).findFirst();
+
+        // Se não encontrar, manda a exception
+        if (optionalMovie.isEmpty()) { //fail fast
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Filme com id " + id + " não encontrado.");
+        }
+        return optionalMovie;
+    }
 }
